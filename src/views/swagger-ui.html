@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediaFlow CRM API Documentation</title>
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@5.10.5/swagger-ui.css">
+    <link rel="icon" type="image/png" href="https://unpkg.com/swagger-ui-dist@5.10.5/favicon-32x32.png" sizes="32x32" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        .topbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            border-bottom: 3px solid #5568d3;
+        }
+
+        .topbar-wrapper .link {
+            color: white !important;
+        }
+
+        .swagger-ui .topbar .download-url-wrapper {
+            display: none;
+        }
+
+        .swagger-ui .info .title {
+            color: #667eea;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .swagger-ui .info .description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .swagger-ui .opblock-tag {
+            border-bottom: 2px solid #667eea;
+        }
+
+        .swagger-ui .opblock.opblock-post {
+            background: rgba(73, 204, 144, 0.1);
+            border-color: #49cc90;
+        }
+
+        .swagger-ui .opblock.opblock-get {
+            background: rgba(97, 175, 254, 0.1);
+            border-color: #61affe;
+        }
+
+        .swagger-ui .opblock.opblock-put {
+            background: rgba(252, 161, 48, 0.1);
+            border-color: #fca130;
+        }
+
+        .swagger-ui .opblock.opblock-patch {
+            background: rgba(80, 227, 194, 0.1);
+            border-color: #50e3c2;
+        }
+
+        .swagger-ui .opblock.opblock-delete {
+            background: rgba(249, 62, 62, 0.1);
+            border-color: #f93e3e;
+        }
+
+        .swagger-ui .scheme-container {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .swagger-ui .btn.authorize {
+            background: #667eea;
+            border-color: #667eea;
+        }
+
+        .swagger-ui .btn.authorize:hover {
+            background: #5568d3;
+            border-color: #5568d3;
+        }
+
+        .custom-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .custom-header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 600;
+        }
+
+        .custom-header p {
+            margin: 0.5rem 0 0 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .custom-header .badges {
+            margin-top: 1rem;
+        }
+
+        .custom-header .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            margin: 0 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        #swagger-ui {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .info-container {
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="custom-header">
+        <h1>🎬 MediaFlow CRM API</h1>
+        <p>Complete RESTful API Documentation</p>
+        <div class="badges">
+            <span class="badge">v1.0.0</span>
+            <span class="badge">OpenAPI 3.0.3</span>
+            <span class="badge">50 Endpoints</span>
+            <span class="badge">JWT Auth</span>
+        </div>
+    </div>
+
+    <div id="swagger-ui"></div>
+
+    <script src="https://unpkg.com/swagger-ui-dist@5.10.5/swagger-ui-bundle.js"></script>
+    <script src="https://unpkg.com/swagger-ui-dist@5.10.5/swagger-ui-standalone-preset.js"></script>
+    <script>
+        window.onload = function() {
+            console.log('Loading MediaFlow CRM API Documentation...');
+            
+            // Fetch the OpenAPI spec
+            fetch('/api/docs/openapi.json')
+                .then(response => {
+                    console.log('Fetch response status:', response.status);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(spec => {
+                    console.log('OpenAPI spec loaded successfully:', spec.info.title);
+                    
+                    // Initialize Swagger UI
+                    window.ui = SwaggerUIBundle({
+                        spec: spec,
+                        dom_id: '#swagger-ui',
+                        deepLinking: true,
+                        presets: [
+                            SwaggerUIBundle.presets.apis,
+                            SwaggerUIStandalonePreset
+                        ],
+                        plugins: [
+                            SwaggerUIBundle.plugins.DownloadUrl
+                        ],
+                        layout: "StandaloneLayout",
+                        docExpansion: "list",
+                        defaultModelsExpandDepth: 1,
+                        defaultModelExpandDepth: 1,
+                        displayRequestDuration: true,
+                        filter: true,
+                        tryItOutEnabled: true,
+                        persistAuthorization: true,
+                        supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
+                        onComplete: function() {
+                            console.log('✅ MediaFlow CRM API Documentation Loaded Successfully!');
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('❌ Error loading OpenAPI spec:', error);
+                    document.getElementById('swagger-ui').innerHTML = `
+                        <div style="padding: 2rem; text-align: center; color: #f93e3e;">
+                            <h2>⚠️ Error Loading API Documentation</h2>
+                            <p>Unable to load the OpenAPI specification.</p>
+                            <p style="color: #666; font-family: monospace;">Error: ${error.message}</p>
+                            <p style="margin-top: 2rem;">
+                                <strong>Troubleshooting:</strong><br>
+                                1. Check if <code>/api/docs/openapi.json</code> is accessible<br>
+                                2. Check the browser console for details<br>
+                                3. Ensure the API server is running on port 4000
+                            </p>
+                        </div>
+                    `;
+                });
+        };
+    </script>
+</body>
+</html>

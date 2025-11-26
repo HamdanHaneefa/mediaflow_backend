@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediaFlow CRM API Documentation</title>
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@5.10.5/swagger-ui.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .version-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .subtitle {
+            margin-top: 0.5rem;
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+            padding-bottom: 2rem;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .sidebar h3 {
+            margin-bottom: 1rem;
+            color: #667eea;
+            font-size: 1.1rem;
+        }
+
+        .nav-list {
+            list-style: none;
+        }
+
+        .nav-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-list a {
+            color: #555;
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .nav-list a:hover {
+            background: #f0f0f0;
+            color: #667eea;
+        }
+
+        .content {
+            flex: 1;
+        }
+
+        .section {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f0f0f0;
+            font-size: 1.8rem;
+        }
+
+        .section h3 {
+            color: #333;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .endpoint {
+            background: #f9f9f9;
+            border-left: 4px solid #667eea;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .endpoint:hover {
+            background: #f0f0f0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .method {
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        .method.post {
+            background: #49cc90;
+            color: white;
+        }
+
+        .method.get {
+            background: #61affe;
+            color: white;
+        }
+
+        .method.put {
+            background: #fca130;
+            color: white;
+        }
+
+        .method.patch {
+            background: #50e3c2;
+            color: white;
+        }
+
+        .method.delete {
+            background: #f93e3e;
+            color: white;
+        }
+
+        .endpoint-path {
+            font-family: 'Courier New', monospace;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        .endpoint-description {
+            color: #666;
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .endpoint-details {
+            display: none;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .endpoint-details.active {
+            display: block;
+        }
+
+        .detail-section {
+            margin-top: 1rem;
+        }
+
+        .detail-section h4 {
+            color: #555;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .param-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.5rem;
+        }
+
+        .param-table th,
+        .param-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .param-table th {
+            background: #f5f5f5;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .param-name {
+            font-family: 'Courier New', monospace;
+            color: #667eea;
+        }
+
+        .param-type {
+            color: #888;
+            font-size: 0.85rem;
+        }
+
+        .required-badge {
+            background: #f93e3e;
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+
+        .try-it-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .try-it-btn:hover {
+            background: #5568d3;
+        }
+
+        .auth-notice {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 4px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <div class="header-content">
+                <div>
+                    <h1>🎬 MediaFlow CRM API</h1>
+                    <p class="subtitle">Complete API Documentation - Phase 2</p>
+                </div>
+                <div class="version-badge">v1.0.0 | OAS 3.1</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container main-content">
+        <aside class="sidebar">
+            <h3>📑 Navigation</h3>
+            <input type="text" class="search-box" placeholder="Search endpoints..." id="searchBox">
+            <ul class="nav-list">
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#authentication">Authentication</a></li>
+                <li><a href="#contacts">Contacts</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#tasks">Tasks</a></li>
+                <li><a href="#team">Team Management</a></li>
+                <li><a href="#upload">File Upload</a></li>
+                <li><a href="#health">Health Check</a></li>
+            </ul>
+        </aside>
+
+        <main class="content">
+            <!-- Overview Section -->
+            <section id="overview" class="section">
+                <h2>📖 Overview</h2>
+                <p>Welcome to the MediaFlow CRM API documentation. This API provides comprehensive endpoints for managing media production workflows, including contacts, projects, tasks, team members, and file uploads.</p>
+                
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number">40+</div>
+                        <div class="stat-label">API Endpoints</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">7</div>
+                        <div class="stat-label">Resource Types</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Type Safe</div>
+                    </div>
+                </div>
+
+                <h3>Base URL</h3>
+                <div class="code-block">http://localhost:4000/api</div>
+
+                <h3>Response Format</h3>
+                <p>All responses follow a consistent format:</p>
+                <div class="code-block">{
+  "success": true,
+  "message": "Operation successful",
+  "data": { /* response data */ },
+  "timestamp": "2025-11-26T10:30:00.000Z"
+}</div>
+
+                <div class="auth-notice">
+                    <strong>🔒 Authentication Required:</strong> All endpoints except health checks require JWT authentication via Bearer token.
+                </div>
+            </section>
+
+            <!-- Authentication Section -->
+            <section id="authentication" class="section">
+                <h2>🔐 Authentication</h2>
+                <p>The API uses JWT (JSON Web Tokens) for authentication. Include the token in the Authorization header for all requests.</p>
+
+                <!-- Register -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/auth/register</span>
+                    </div>
+                    <div class="endpoint-description">Register a new user account</div>
+                    <div class="endpoint-details">
+                        <div class="detail-section">
+                            <h4>Request Body <span class="required-badge">required</span></h4>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="param-name">email</span></td>
+                                        <td><span class="param-type">string</span></td>
+                                        <td>User email address</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">password</span></td>
+                                        <td><span class="param-type">string</span></td>
+                                        <td>Password (min 6 characters)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">firstName</span></td>
+                                        <td><span class="param-type">string</span></td>
+                                        <td>User's first name</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">lastName</span></td>
+                                        <td><span class="param-type">string</span></td>
+                                        <td>User's last name</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="detail-section">
+                            <h4>Example Request</h4>
+                            <div class="code-block">{
+  "email": "user@example.com",
+  "password": "SecurePass123",
+  "firstName": "John",
+  "lastName": "Doe"
+}</div>
+                        </div>
+                        <div class="detail-section">
+                            <h4>Example Response (200)</h4>
+                            <div class="code-block">{
+  "success": true,
+  "message": "User registered successfully",
+  "data": {
+    "accessToken": "eyJhbGc...",
+    "refreshToken": "eyJhbGc...",
+    "user": {
+      "id": "uuid",
+      "email": "user@example.com",
+      "firstName": "John",
+      "lastName": "Doe"
+    }
+  }
+}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Login -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/auth/login</span>
+                    </div>
+                    <div class="endpoint-description">Login with email and password</div>
+                    <div class="endpoint-details">
+                        <div class="detail-section">
+                            <h4>Request Body</h4>
+                            <div class="code-block">{
+  "email": "user@example.com",
+  "password": "SecurePass123"
+}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Refresh Token -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/auth/refresh</span>
+                    </div>
+                    <div class="endpoint-description">Refresh access token</div>
+                </div>
+
+                <!-- Get Current User -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="endpoint-path">/auth/me</span>
+                    </div>
+                    <div class="endpoint-description">Get current authenticated user details</div>
+                </div>
+
+                <!-- Logout -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/auth/logout</span>
+                    </div>
+                    <div class="endpoint-description">Logout and invalidate tokens</div>
+                </div>
+
+                <!-- Forgot Password -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/auth/forgot-password</span>
+                    </div>
+                    <div class="endpoint-description">Request password reset email</div>
+                </div>
+
+                <!-- Reset Password -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/auth/reset-password</span>
+                    </div>
+                    <div class="endpoint-description">Reset password with token</div>
+                </div>
+
+                <!-- Change Password -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method patch">PATCH</span>
+                        <span class="endpoint-path">/auth/change-password</span>
+                    </div>
+                    <div class="endpoint-description">Change current password</div>
+                </div>
+            </section>
+
+            <!-- Contacts Section -->
+            <section id="contacts" class="section">
+                <h2>📇 Contacts Management</h2>
+                <p>Manage clients, vendors, freelancers, and partners.</p>
+
+                <!-- Create Contact -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/contacts</span>
+                    </div>
+                    <div class="endpoint-description">Create a new contact</div>
+                    <div class="endpoint-details">
+                        <div class="detail-section">
+                            <h4>Request Body</h4>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="param-name">name</span> <span class="required-badge">required</span></td>
+                                        <td><span class="param-type">string</span></td>
+                                        <td>Contact name</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">email</span> <span class="required-badge">required</span></td>
+                                        <td><span class="param-type">string</span></td>
+                                        <td>Email address (unique)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">phone</span></td>
+                                        <td><span class="param-type">string</span></td>
+                                        <td>Phone number</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">company</span></td>
+                                        <td><span class="param-type">string</span></td>
+                                        <td>Company name</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">role</span></td>
+                                        <td><span class="param-type">enum</span></td>
+                                        <td>Client | Vendor | Freelancer | Partner</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">status</span></td>
+                                        <td><span class="param-type">enum</span></td>
+                                        <td>Active | Inactive | Pending</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">tags</span></td>
+                                        <td><span class="param-type">array</span></td>
+                                        <td>Tags for categorization</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="detail-section">
+                            <h4>Example Request</h4>
+                            <div class="code-block">{
+  "name": "Acme Productions",
+  "email": "contact@acme.com",
+  "phone": "+1-555-0100",
+  "company": "Acme Productions Inc",
+  "role": "Client",
+  "status": "Active",
+  "tags": ["vip", "corporate-video"]
+}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- List Contacts -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="endpoint-path">/contacts</span>
+                    </div>
+                    <div class="endpoint-description">List all contacts with pagination and filters</div>
+                    <div class="endpoint-details">
+                        <div class="detail-section">
+                            <h4>Query Parameters</h4>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="param-name">page</span></td>
+                                        <td><span class="param-type">number</span></td>
+                                        <td>Page number (default: 1)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">limit</span></td>
+                                        <td><span class="param-type">number</span></td>
+                                        <td>Items per page (default: 10)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">search</span></td>
+                                        <td><span class="param-type">string</span></td>
+                                        <td>Search by name, email, or company</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">role</span></td>
+                                        <td><span class="param-type">enum</span></td>
+                                        <td>Filter by role</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">status</span></td>
+                                        <td><span class="param-type">enum</span></td>
+                                        <td>Filter by status</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">sortBy</span></td>
+                                        <td><span class="param-type">string</span></td>
+                                        <td>Sort field (default: created_at)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">sortOrder</span></td>
+                                        <td><span class="param-type">enum</span></td>
+                                        <td>asc | desc (default: desc)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Get Contact -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="endpoint-path">/contacts/:id</span>
+                    </div>
+                    <div class="endpoint-description">Get contact details with relationships</div>
+                </div>
+
+                <!-- Get Contact Stats -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="endpoint-path">/contacts/:id/stats</span>
+                    </div>
+                    <div class="endpoint-description">Get contact statistics (projects, tasks, revenue)</div>
+                </div>
+
+                <!-- Update Contact -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method put">PUT</span>
+                        <span class="endpoint-path">/contacts/:id</span>
+                    </div>
+                    <div class="endpoint-description">Update contact information</div>
+                </div>
+
+                <!-- Delete Contact -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method delete">DELETE</span>
+                        <span class="endpoint-path">/contacts/:id</span>
+                    </div>
+                    <div class="endpoint-description">Delete a contact (checks for dependencies)</div>
+                </div>
+            </section>
+
+            <!-- Projects Section -->
+            <section id="projects" class="section">
+                <h2>🎬 Projects Management</h2>
+                <p>Manage production projects from pre-production to delivery.</p>
+
+                <!-- Create Project -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/projects</span>
+                    </div>
+                    <div class="endpoint-description">Create a new project</div>
+                    <div class="endpoint-details">
+                        <div class="detail-section">
+                            <h4>Request Body</h4>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="param-name">title</span> <span class="required-badge">required</span></td>
+                                        <td><span class="param-type">string</span></td>
+                                        <td>Project title</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">description</span></td>
+                                        <td><span class="param-type">string</span></td>
+                                        <td>Project description</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">type</span></td>
+                                        <td><span class="param-type">string</span></td>
+                                        <td>Project type (e.g., Commercial)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">status</span></td>
+                                        <td><span class="param-type">enum</span></td>
+                                        <td>Active | On Hold | Completed | Cancelled</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">phase</span></td>
+                                        <td><span class="param-type">enum</span></td>
+                                        <td>Pre-production | Production | Post-production | Delivery</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">client_id</span></td>
+                                        <td><span class="param-type">uuid</span></td>
+                                        <td>Client contact ID</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">budget</span></td>
+                                        <td><span class="param-type">number</span></td>
+                                        <td>Project budget</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">start_date</span></td>
+                                        <td><span class="param-type">date</span></td>
+                                        <td>Start date</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">end_date</span></td>
+                                        <td><span class="param-type">date</span></td>
+                                        <td>End date</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- List Projects -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="endpoint-path">/projects</span>
+                    </div>
+                    <div class="endpoint-description">List all projects with pagination and filters</div>
+                </div>
+
+                <!-- Get Project -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="endpoint-path">/projects/:id</span>
+                    </div>
+                    <div class="endpoint-description">Get project details with tasks, expenses, and team</div>
+                </div>
+
+                <!-- Get Project Stats -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="endpoint-path">/projects/:id/stats</span>
+                    </div>
+                    <div class="endpoint-description">Get project statistics (tasks, expenses, income, profit)</div>
+                </div>
+
+                <!-- Update Project -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method put">PUT</span>
+                        <span class="endpoint-path">/projects/:id</span>
+                    </div>
+                    <div class="endpoint-description">Update project information</div>
+                </div>
+
+                <!-- Archive Project -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method delete">DELETE</span>
+                        <span class="endpoint-path">/projects/:id</span>
+                    </div>
+                    <div class="endpoint-description">Archive a project (soft delete)</div>
+                </div>
+            </section>
+
+            <!-- Tasks Section -->
+            <section id="tasks" class="section">
+                <h2>✅ Tasks Management</h2>
+                <p>Create and track tasks with priorities and assignments.</p>
+
+                <!-- Create Task -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/tasks</span>
+                    </div>
+                    <div class="endpoint-description">Create a new task</div>
+                    <div class="endpoint-details">
+                        <div class="detail-section">
+                            <h4>Request Body</h4>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="param-name">title</span> <span class="required-badge">required</span></td>
+                                        <td><span class="param-type">string</span></td>
+                                        <td>Task title</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">description</span></td>
+                                        <td><span class="param-type">string</span></td>
+                                        <td>Task description</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">status</span></td>
+                                        <td><span class="param-type">enum</span></td>
+                                        <td>To Do | In Progress | Review | Done | Blocked</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">priority</span></td>
+                                        <td><span class="param-type">enum</span></td>
+                                        <td>Low | Medium | High | Urgent</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">project_id</span></td>
+                                        <td><span class="param-type">uuid</span></td>
+                                        <td>Project ID</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">assigned_to</span></td>
+                                        <td><span class="param-type">uuid</span></td>
+                                        <td>Assignee contact ID</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">due_date</span></td>
+                                        <td><span class="param-type">date</span></td>
+                                        <td>Due date</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">type</span></td>
+                                        <td><span class="param-type">string</span></td>
+                                        <td>Task type</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- List Tasks -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="endpoint-path">/tasks</span>
+                    </div>
+                    <div class="endpoint-description">List all tasks with pagination and filters</div>
+                </div>
+
+                <!-- Get Task Stats -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="endpoint-path">/tasks/stats</span>
+                    </div>
+                    <div class="endpoint-description">Get task statistics by status and priority</div>
+                </div>
+
+                <!-- Get Task -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="endpoint-path">/tasks/:id</span>
+                    </div>
+                    <div class="endpoint-description">Get task details</div>
+                </div>
+
+                <!-- Update Task -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method put">PUT</span>
+                        <span class="endpoint-path">/tasks/:id</span>
+                    </div>
+                    <div class="endpoint-description">Update task information</div>
+                </div>
+
+                <!-- Delete Task -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method delete">DELETE</span>
+                        <span class="endpoint-path">/tasks/:id</span>
+                    </div>
+                    <div class="endpoint-description">Delete a task</div>
+                </div>
+            </section>
+
+            <!-- Team Management Section -->
+            <section id="team" class="section">
+                <h2>👥 Team Management</h2>
+                <p>Manage team members, teams, and project assignments.</p>
+
+                <h3>Team Members</h3>
+
+                <!-- Create Team Member -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/team/members</span>
+                    </div>
+                    <div class="endpoint-description">Create a new team member (auto-generates password)</div>
+                </div>
+
+                <!-- List Team Members -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="endpoint-path">/team/members</span>
+                    </div>
+                    <div class="endpoint-description">List all team members with filters</div>
+                </div>
+
+                <!-- Get Team Member -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="endpoint-path">/team/members/:id</span>
+                    </div>
+                    <div class="endpoint-description">Get team member details with assignments</div>
+                </div>
+
+                <!-- Update Team Member -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method put">PUT</span>
+                        <span class="endpoint-path">/team/members/:id</span>
+                    </div>
+                    <div class="endpoint-description">Update team member information</div>
+                </div>
+
+                <!-- Deactivate Team Member -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method delete">DELETE</span>
+                        <span class="endpoint-path">/team/members/:id</span>
+                    </div>
+                    <div class="endpoint-description">Deactivate a team member (soft delete)</div>
+                </div>
+
+                <h3>Project Assignments</h3>
+
+                <!-- Assign to Project -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/team/assignments</span>
+                    </div>
+                    <div class="endpoint-description">Assign team member to a project with role</div>
+                </div>
+
+                <!-- Remove Assignment -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method delete">DELETE</span>
+                        <span class="endpoint-path">/team/assignments/:id</span>
+                    </div>
+                    <div class="endpoint-description">Remove project assignment</div>
+                </div>
+
+                <h3>Teams</h3>
+
+                <!-- Create Team -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/team</span>
+                    </div>
+                    <div class="endpoint-description">Create a new team</div>
+                </div>
+
+                <!-- List Teams -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="endpoint-path">/team</span>
+                    </div>
+                    <div class="endpoint-description">List all teams</div>
+                </div>
+
+                <!-- Get Team -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="endpoint-path">/team/:id</span>
+                    </div>
+                    <div class="endpoint-description">Get team details with members and projects</div>
+                </div>
+
+                <!-- Update Team -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method put">PUT</span>
+                        <span class="endpoint-path">/team/:id</span>
+                    </div>
+                    <div class="endpoint-description">Update team information</div>
+                </div>
+
+                <!-- Delete Team -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method delete">DELETE</span>
+                        <span class="endpoint-path">/team/:id</span>
+                    </div>
+                    <div class="endpoint-description">Delete a team</div>
+                </div>
+            </section>
+
+            <!-- File Upload Section -->
+            <section id="upload" class="section">
+                <h2>📁 File Upload</h2>
+                <p>Upload images, documents, videos, and other files with type-specific validation.</p>
+
+                <!-- Upload Image -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/upload/image</span>
+                    </div>
+                    <div class="endpoint-description">Upload a single image (10MB limit)</div>
+                    <div class="endpoint-details">
+                        <div class="detail-section">
+                            <h4>Supported Formats</h4>
+                            <p>jpeg, jpg, png, gif, webp</p>
+                        </div>
+                        <div class="detail-section">
+                            <h4>Form Data</h4>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="param-name">file</span> <span class="required-badge">required</span></td>
+                                        <td><span class="param-type">file</span></td>
+                                        <td>Image file to upload</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upload Multiple Images -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/upload/images</span>
+                    </div>
+                    <div class="endpoint-description">Upload multiple images (max 10 files)</div>
+                </div>
+
+                <!-- Upload Document -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/upload/document</span>
+                    </div>
+                    <div class="endpoint-description">Upload a single document (50MB limit)</div>
+                    <div class="endpoint-details">
+                        <div class="detail-section">
+                            <h4>Supported Formats</h4>
+                            <p>pdf, doc, docx, xls, xlsx, ppt, pptx, txt, csv</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upload Multiple Documents -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/upload/documents</span>
+                    </div>
+                    <div class="endpoint-description">Upload multiple documents (max 10 files)</div>
+                </div>
+
+                <!-- Upload Video -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/upload/video</span>
+                    </div>
+                    <div class="endpoint-description">Upload a video file (500MB limit)</div>
+                    <div class="endpoint-details">
+                        <div class="detail-section">
+                            <h4>Supported Formats</h4>
+                            <p>mp4, avi, mov, wmv, flv, mkv, webm</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upload Avatar -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/upload/avatar</span>
+                    </div>
+                    <div class="endpoint-description">Upload an avatar image (5MB limit)</div>
+                </div>
+
+                <!-- Upload Receipt -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/upload/receipt</span>
+                    </div>
+                    <div class="endpoint-description">Upload a receipt image (10MB limit)</div>
+                </div>
+
+                <!-- Upload Any File -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/upload/any</span>
+                    </div>
+                    <div class="endpoint-description">Upload any file type (100MB limit)</div>
+                </div>
+            </section>
+
+            <!-- Health Check Section -->
+            <section id="health" class="section">
+                <h2>🏥 Health Check</h2>
+                <p>System health and status endpoints (no authentication required).</p>
+
+                <!-- Basic Health -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="endpoint-path">/health</span>
+                    </div>
+                    <div class="endpoint-description">Basic health check</div>
+                </div>
+
+                <!-- Detailed Health -->
+                <div class="endpoint" onclick="toggleDetails(this)">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="endpoint-path">/health/detailed</span>
+                    </div>
+                    <div class="endpoint-description">Detailed system information</div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        function toggleDetails(element) {
+            const details = element.querySelector('.endpoint-details');
+            if (details) {
+                details.classList.toggle('active');
+            }
+        }
+
+        // Search functionality
+        document.getElementById('searchBox').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const endpoints = document.querySelectorAll('.endpoint');
+            
+            endpoints.forEach(endpoint => {
+                const path = endpoint.querySelector('.endpoint-path').textContent.toLowerCase();
+                const description = endpoint.querySelector('.endpoint-description').textContent.toLowerCase();
+                
+                if (path.includes(searchTerm) || description.includes(searchTerm)) {
+                    endpoint.style.display = 'block';
+                } else {
+                    endpoint.style.display = 'none';
+                }
+            });
+        });
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('.nav-list a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
