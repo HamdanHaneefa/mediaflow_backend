@@ -27,6 +27,7 @@ const envSchema = z.object({
   SMTP_PASS: z.string().optional(),
   SMTP_FROM: z.string().optional(),
   // Redis configuration (optional)
+  REDIS_ENABLED: z.string().optional().default('false'),
   REDIS_HOST: z.string().optional(),
   REDIS_PORT: z.string().optional(),
   REDIS_PASSWORD: z.string().optional(),

@@ -13,7 +13,7 @@ export const generateAccessToken = (userId: string, email: string, role: string)
   return jwt.sign(
     { id: userId, email, role, type: 'access' } as JwtPayload,
     env.JWT_SECRET,
-    { expiresIn: env.JWT_ACCESS_EXPIRY }
+    { expiresIn: env.JWT_EXPIRES_IN }
   );
 };
 
@@ -21,7 +21,7 @@ export const generateRefreshToken = (userId: string, email: string, role: string
   return jwt.sign(
     { id: userId, email, role, type: 'refresh' } as JwtPayload,
     env.JWT_REFRESH_SECRET,
-    { expiresIn: env.JWT_REFRESH_EXPIRY }
+    { expiresIn: env.JWT_REFRESH_EXPIRES_IN }
   );
 };
 

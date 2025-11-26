@@ -5,12 +5,21 @@ import env from '../config/env';
 class CacheService {
   private client: Redis | null = null;
   private isConnected: boolean = false;
+  private redisEnabled: boolean = false;
 
   constructor() {
     this.initialize();
   }
 
   private initialize() {
+    // Only enable Redis if explicitly set to 'true'
+    this.redisEnabled = env.REDIS_ENABLED === 'true';
+
+    if (!this.redisEnabled) {
+      logger.info('📦 Redis disabled - using in-memory fallback for cache operations');
+      return;
+    }
+
     try {
       // Redis configuration
       const redisConfig = {
@@ -19,10 +28,17 @@ class CacheService {
         password: env.REDIS_PASSWORD || undefined,
         db: parseInt(env.REDIS_DB || '0'),
         retryStrategy: (times: number) => {
-          const delay = Math.min(times * 50, 2000);
+          // Stop retrying after 3 attempts
+          if (times > 3) {
+            logger.warn('⚠️  Redis connection failed after 3 attempts, disabling Redis');
+            this.redisEnabled = false;
+            return null; // Stop retrying
+          }
+          const delay = Math.min(times * 1000, 3000);
           return delay;
         },
         maxRetriesPerRequest: 3,
+        lazyConnect: true, // Don't connect immediately
       };
 
       this.client = new Redis(redisConfig);
@@ -32,18 +48,30 @@ class CacheService {
         logger.info('✅ Redis connected successfully');
       });
 
-      this.client.on('error', (error) => {
+      this.client.on('error', () => {
         this.isConnected = false;
-        logger.error('❌ Redis connection error:', error);
+        // Only log once, then disable
+        if (this.redisEnabled) {
+          logger.warn('⚠️  Redis connection error - falling back to in-memory cache');
+          this.redisEnabled = false;
+        }
       });
 
       this.client.on('close', () => {
         this.isConnected = false;
-        logger.warn('⚠️  Redis connection closed');
+        logger.info('📦 Redis connection closed - using in-memory fallback');
+      });
+
+      // Try to connect
+      this.client.connect().catch(() => {
+        logger.warn('⚠️  Redis not available - using in-memory fallback');
+        this.redisEnabled = false;
+        this.isConnected = false;
       });
     } catch (error) {
-      logger.error('Failed to initialize Redis:', error);
+      logger.warn('⚠️  Failed to initialize Redis - using in-memory fallback');
       this.client = null;
+      this.redisEnabled = false;
     }
   }
 
