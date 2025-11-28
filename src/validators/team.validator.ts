@@ -32,6 +32,7 @@ export const updateTeamMemberSchema = z.object({
     position: z.string().optional().nullable(),
     department: z.string().optional().nullable(),
     status: z.enum(['active', 'inactive', 'on_leave']).optional(),
+    is_active: z.boolean().optional(), // For backward compatibility
     permissions: z.record(z.boolean()).optional(),
     hourly_rate: z.number().positive().optional().nullable(),
     emergency_contact: z.record(z.any()).optional().nullable(),

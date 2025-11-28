@@ -74,3 +74,6 @@ export const sendCreated = (res: Response, data?: any, message = 'Resource creat
 export const sendNoContent = (res: Response): Response => {
   return res.status(204).send();
 };
+
+// Alias for backward compatibility
+export const successResponse = sendSuccess;

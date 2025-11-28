@@ -195,7 +195,7 @@ export class TeamService {
     );
 
     // Remove passwords from results
-    result.data = result.data.map((member: any) => {
+    result.items = result.items.map((member: any) => {
       const { password, ...memberWithoutPassword } = member;
       return memberWithoutPassword;
     });
@@ -203,7 +203,7 @@ export class TeamService {
     return result;
   }
 
-  async updateTeamMember(id: string, data: UpdateTeamMemberInput) {
+  async updateTeamMember(id: string, data: UpdateTeamMemberInput & { is_active?: boolean }) {
     // Check if member exists
     const existingMember = await prisma.team_members.findUnique({
       where: { id },
@@ -235,10 +235,17 @@ export class TeamService {
       }
     }
 
+    // Transform is_active to status if provided
+    const updateData: any = { ...data };
+    if ('is_active' in data) {
+      updateData.status = data.is_active ? 'active' : 'inactive';
+      delete updateData.is_active;
+    }
+
     const member = await prisma.team_members.update({
       where: { id },
       data: {
-        ...data,
+        ...updateData,
         updated_at: new Date(),
       },
       include: {

@@ -5,12 +5,56 @@ import { paginate, PaginatedResult } from '../utils/pagination';
 
 const prisma = new PrismaClient();
 
+// Helper function to transform project data for frontend compatibility
+function transformProject(project: any) {
+  if (!project) return project;
+  
+  return {
+    ...project,
+    name: project.title, // Add 'name' field from 'title'
+    contact_id: project.client_id, // Add 'contact_id' field from 'client_id'
+    // Add default values for frontend-expected fields
+    priority: 'Medium', // Default priority (frontend expects this)
+    progress: 0, // Default progress (frontend expects this)
+    actual_cost: 0, // Default actual cost (frontend expects this)
+    deadline: project.end_date, // Map end_date to deadline
+    created_by: 'system', // Default created_by (frontend expects this)
+  };
+}
+
+// Helper function to transform array of projects
+function transformProjects(projects: any[]) {
+  return projects.map(transformProject);
+}
+
+// Helper function to normalize input from frontend (name/contact_id → title/client_id)
+function normalizeProjectInput(data: any) {
+  const normalized = { ...data };
+  
+  // Map 'name' to 'title' if provided
+  if (data.name !== undefined) {
+    normalized.title = data.name;
+    delete normalized.name;
+  }
+  
+  // Map 'contact_id' to 'client_id' if provided
+  if (data.contact_id !== undefined) {
+    normalized.client_id = data.contact_id;
+    delete normalized.contact_id;
+  }
+  
+  return normalized;
+}
+
 export class ProjectsService {
   async createProject(data: CreateProjectInput) {
+    // Normalize input from frontend
+    const normalizedData = normalizeProjectInput(data);
+    
     // Validate client exists if provided
-    if (data.client_id) {
+    if (normalizedData.client_id) {
       const clientExists = await prisma.contacts.findUnique({
-        where: { id: data.client_id },
+        where: { id: normalizedData.client_id },
       });
 
       if (!clientExists) {
@@ -19,12 +63,12 @@ export class ProjectsService {
     }
 
     // Convert dates to Date objects if provided as strings
-    const projectData: any = { ...data };
-    if (data.start_date) {
-      projectData.start_date = new Date(data.start_date);
+    const projectData: any = { ...normalizedData };
+    if (normalizedData.start_date) {
+      projectData.start_date = new Date(normalizedData.start_date);
     }
-    if (data.end_date) {
-      projectData.end_date = new Date(data.end_date);
+    if (normalizedData.end_date) {
+      projectData.end_date = new Date(normalizedData.end_date);
     }
 
     const project = await prisma.projects.create({
@@ -51,7 +95,7 @@ export class ProjectsService {
       },
     });
 
-    return project;
+    return transformProject(project);
   }
 
   async getProject(id: string) {
@@ -150,7 +194,7 @@ export class ProjectsService {
       throw new NotFoundError('Project not found');
     }
 
-    return project;
+    return transformProject(project);
   }
 
   async listProjects(params: {
@@ -199,7 +243,7 @@ export class ProjectsService {
       [sortBy]: sortOrder,
     };
 
-    return paginate(
+    const result = await paginate(
       prisma.projects,
       { page, limit },
       {
@@ -224,9 +268,18 @@ export class ProjectsService {
         },
       }
     );
+    
+    // Transform the results
+    return {
+      ...result,
+      items: transformProjects(result.items),
+    };
   }
 
   async updateProject(id: string, data: UpdateProjectInput) {
+    // Normalize input from frontend
+    const normalizedData = normalizeProjectInput(data);
+    
     // Check if project exists
     const existingProject = await prisma.projects.findUnique({
       where: { id },
@@ -237,9 +290,9 @@ export class ProjectsService {
     }
 
     // Validate client exists if provided
-    if (data.client_id) {
+    if (normalizedData.client_id) {
       const clientExists = await prisma.contacts.findUnique({
-        where: { id: data.client_id },
+        where: { id: normalizedData.client_id },
       });
 
       if (!clientExists) {
@@ -248,12 +301,12 @@ export class ProjectsService {
     }
 
     // Convert dates to Date objects if provided as strings
-    const projectData: any = { ...data };
-    if (data.start_date) {
-      projectData.start_date = new Date(data.start_date);
+    const projectData: any = { ...normalizedData };
+    if (normalizedData.start_date) {
+      projectData.start_date = new Date(normalizedData.start_date);
     }
-    if (data.end_date) {
-      projectData.end_date = new Date(data.end_date);
+    if (normalizedData.end_date) {
+      projectData.end_date = new Date(normalizedData.end_date);
     }
 
     const project = await prisma.projects.update({
@@ -281,7 +334,7 @@ export class ProjectsService {
       },
     });
 
-    return project;
+    return transformProject(project);
   }
 
   async deleteProject(id: string) {

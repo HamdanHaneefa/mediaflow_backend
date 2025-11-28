@@ -1,7 +1,8 @@
-import { PrismaClient } from '@prisma/client';
+ import { PrismaClient } from '@prisma/client';
 import { hashPassword } from '../src/utils/crypto';
 
 const prisma = new PrismaClient();
+console.log(prisma)
 
 async function main() {
   console.log('🌱 Starting database seeding...\n');

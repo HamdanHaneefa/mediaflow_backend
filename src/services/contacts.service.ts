@@ -5,11 +5,50 @@ import { paginate, PaginationParams, PaginatedResult } from '../utils/pagination
 
 const prisma = new PrismaClient();
 
+// Helper function to transform contact data to match frontend expectations
+function transformContact(contact: any) {
+  if (!contact) return contact;
+  
+  // Split name into first_name and last_name if it exists
+  const nameParts = contact.name ? contact.name.trim().split(' ') : ['', ''];
+  const first_name = nameParts[0] || '';
+  const last_name = nameParts.slice(1).join(' ') || '';
+  
+  return {
+    ...contact,
+    first_name,
+    last_name,
+  };
+}
+
+// Helper function to transform array of contacts
+function transformContacts(contacts: any[]) {
+  return contacts.map(transformContact);
+}
+
+// Helper function to combine first_name and last_name into name for database
+function normalizeContactInput(data: any) {
+  const normalized = { ...data };
+  
+  // If first_name and last_name are provided, combine them into name
+  if (data.first_name || data.last_name) {
+    normalized.name = `${data.first_name || ''} ${data.last_name || ''}`.trim();
+    // Remove first_name and last_name from the data to be saved
+    delete normalized.first_name;
+    delete normalized.last_name;
+  }
+  
+  return normalized;
+}
+
 export class ContactsService {
   async createContact(data: CreateContactInput) {
+    // Normalize input: combine first_name + last_name into name if needed
+    const normalizedData = normalizeContactInput(data);
+    
     // Check if email already exists
     const existingContact = await prisma.contacts.findUnique({
-      where: { email: data.email },
+      where: { email: normalizedData.email },
     });
 
     if (existingContact) {
@@ -18,7 +57,7 @@ export class ContactsService {
 
     const contact = await prisma.contacts.create({
       data: {
-        ...data,
+        ...normalizedData,
         updated_at: new Date(),
       },
       include: {
@@ -39,7 +78,7 @@ export class ContactsService {
       },
     });
 
-    return contact;
+    return transformContact(contact);
   }
 
   async getContact(id: string) {
@@ -93,7 +132,7 @@ export class ContactsService {
       throw new NotFoundError('Contact not found');
     }
 
-    return contact;
+    return transformContact(contact);
   }
 
   async listContacts(params: {
@@ -137,7 +176,7 @@ export class ContactsService {
       [sortBy]: sortOrder,
     };
 
-    return paginate(
+    const result = await paginate(
       prisma.contacts,
       { page, limit },
       {
@@ -154,9 +193,18 @@ export class ContactsService {
         },
       }
     );
+    
+    // Transform contacts to include first_name and last_name
+    return {
+      ...result,
+      items: transformContacts(result.items),
+    };
   }
 
   async updateContact(id: string, data: UpdateContactInput) {
+    // Normalize input: combine first_name + last_name into name if needed
+    const normalizedData = normalizeContactInput(data);
+    
     // Check if contact exists
     const existingContact = await prisma.contacts.findUnique({
       where: { id },
@@ -167,9 +215,9 @@ export class ContactsService {
     }
 
     // If email is being updated, check if new email already exists
-    if (data.email && data.email !== existingContact.email) {
+    if (normalizedData.email && normalizedData.email !== existingContact.email) {
       const emailExists = await prisma.contacts.findUnique({
-        where: { email: data.email },
+        where: { email: normalizedData.email },
       });
 
       if (emailExists) {
@@ -180,7 +228,7 @@ export class ContactsService {
     const contact = await prisma.contacts.update({
       where: { id },
       data: {
-        ...data,
+        ...normalizedData,
         updated_at: new Date(),
       },
       include: {
@@ -194,7 +242,7 @@ export class ContactsService {
       },
     });
 
-    return contact;
+    return transformContact(contact);
   }
 
   async deleteContact(id: string) {

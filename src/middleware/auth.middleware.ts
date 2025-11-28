@@ -32,7 +32,7 @@ export const authenticate = async (
 
       // Fetch user from database
       const user = await prisma.team_members.findUnique({
-        where: { id: decoded.userId },
+        where: { id: decoded.id },  // ✅ Fixed: Use 'id' not 'userId'
         select: {
           id: true,
           email: true,
@@ -46,7 +46,7 @@ export const authenticate = async (
         throw new UnauthorizedError('User not found');
       }
 
-      if (user.status !== 'Active') {
+      if (user.status !== 'active') {  // ✅ Fixed: lowercase 'active'
         throw new UnauthorizedError('Account is not active');
       }
 
@@ -87,7 +87,7 @@ export const optionalAuth = async (
         const decoded = jwt.verify(token, env.JWT_SECRET) as any;
         
         const user = await prisma.team_members.findUnique({
-          where: { id: decoded.userId },
+          where: { id: decoded.id },  // ✅ Fixed: Use 'id' not 'userId'
           select: {
             id: true,
             email: true,

@@ -2,7 +2,10 @@ import { z } from 'zod';
 
 export const createContactSchema = z.object({
   body: z.object({
-    name: z.string().min(1, 'Name is required').max(255),
+    // Accept either name OR (first_name + last_name)
+    name: z.string().min(1, 'Name is required').max(255).optional(),
+    first_name: z.string().min(1).max(100).optional(),
+    last_name: z.string().min(1).max(100).optional(),
     email: z.string().email('Invalid email address'),
     phone: z.string().optional().nullable(),
     company: z.string().optional().nullable(),
@@ -10,12 +13,20 @@ export const createContactSchema = z.object({
     status: z.enum(['Active', 'Inactive', 'Pending']).default('Active'),
     notes: z.string().optional().nullable(),
     tags: z.array(z.string()).default([]),
-  }),
+  }).refine(
+    (data) => data.name || (data.first_name && data.last_name),
+    {
+      message: 'Either name or both first_name and last_name are required',
+      path: ['name'],
+    }
+  ),
 });
 
 export const updateContactSchema = z.object({
   body: z.object({
     name: z.string().min(1).max(255).optional(),
+    first_name: z.string().min(1).max(100).optional(),
+    last_name: z.string().min(1).max(100).optional(),
     email: z.string().email().optional(),
     phone: z.string().optional().nullable(),
     company: z.string().optional().nullable(),

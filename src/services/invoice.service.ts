@@ -163,6 +163,7 @@ export class InvoiceService {
 
     const result = await paginate(
       prisma.invoices,
+      { page, limit },
       {
         where,
         orderBy,
