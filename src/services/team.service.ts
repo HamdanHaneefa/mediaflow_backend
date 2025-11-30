@@ -51,7 +51,7 @@ export class TeamService {
         updated_at: new Date(),
       },
       include: {
-        team: {
+        teams_team_members_team_idToteams: {
           select: {
             id: true,
             name: true,
@@ -74,20 +74,20 @@ export class TeamService {
     const member = await prisma.team_members.findUnique({
       where: { id },
       include: {
-        team: {
+        teams_team_members_team_idToteams: {
           select: {
             id: true,
             name: true,
             description: true,
           },
         },
-        project_assignments: {
+        project_assignments_project_assignments_team_member_idToteam_members: {
           select: {
             id: true,
             role_in_project: true,
             is_lead: true,
             assigned_at: true,
-            project: {
+            projects: {
               select: {
                 id: true,
                 title: true,
@@ -98,7 +98,7 @@ export class TeamService {
           },
           orderBy: { assigned_at: 'desc' },
         },
-        managed_teams: {
+        teams_teams_manager_idToteam_members: {
           select: {
             id: true,
             name: true,
@@ -178,7 +178,7 @@ export class TeamService {
         where,
         orderBy,
         include: {
-          team: {
+          teams_team_members_team_idToteams: {
             select: {
               id: true,
               name: true,
@@ -186,8 +186,8 @@ export class TeamService {
           },
           _count: {
             select: {
-              project_assignments: true,
-              managed_teams: true,
+              project_assignments_project_assignments_team_member_idToteam_members: true,
+              teams_teams_manager_idToteam_members: true,
             },
           },
         },
@@ -249,7 +249,7 @@ export class TeamService {
         updated_at: new Date(),
       },
       include: {
-        team: {
+        teams_team_members_team_idToteams: {
           select: {
             id: true,
             name: true,
@@ -270,8 +270,8 @@ export class TeamService {
       include: {
         _count: {
           select: {
-            project_assignments: true,
-            managed_teams: true,
+            project_assignments_project_assignments_team_member_idToteam_members: true,
+            teams_teams_manager_idToteam_members: true,
           },
         },
       },
@@ -282,15 +282,15 @@ export class TeamService {
     }
 
     // Check if member has active assignments
-    if (member._count.project_assignments > 0) {
+    if (member._count.project_assignments_project_assignments_team_member_idToteam_members > 0) {
       throw new ConflictError(
-        `Cannot delete team member with ${member._count.project_assignments} active project assignment(s). Please reassign projects first.`
+        `Cannot delete team member with ${member._count.project_assignments_project_assignments_team_member_idToteam_members} active project assignment(s). Please reassign projects first.`
       );
     }
 
-    if (member._count.managed_teams > 0) {
+    if (member._count.teams_teams_manager_idToteam_members > 0) {
       throw new ConflictError(
-        `Cannot delete team member who manages ${member._count.managed_teams} team(s). Please reassign team management first.`
+        `Cannot delete team member who manages ${member._count.teams_teams_manager_idToteam_members} team(s). Please reassign team management first.`
       );
     }
 
@@ -312,7 +312,7 @@ export class TeamService {
     const projectExists = await prisma.projects.findUnique({
       where: { id: data.project_id },
     });
-
+    
     if (!projectExists) {
       throw new NotFoundError('Project not found');
     }
@@ -344,14 +344,14 @@ export class TeamService {
         assigned_at: new Date(),
       },
       include: {
-        project: {
+        projects: {
           select: {
             id: true,
             title: true,
             status: true,
           },
         },
-        team_member: {
+        team_members_project_assignments_team_member_idToteam_members: {
           select: {
             id: true,
             first_name: true,
@@ -363,6 +363,7 @@ export class TeamService {
       },
     });
 
+    console.log('Created assignment:', assignment);
     return assignment;
   }
 
@@ -402,7 +403,7 @@ export class TeamService {
         updated_at: new Date(),
       },
       include: {
-        manager: {
+        team_members_teams_manager_idToteam_members: {
           select: {
             id: true,
             first_name: true,
@@ -412,7 +413,7 @@ export class TeamService {
         },
         _count: {
           select: {
-            members: true,
+            team_members_team_members_team_idToteams: true,
             team_project_assignments: true,
           },
         },
@@ -426,7 +427,7 @@ export class TeamService {
     const team = await prisma.teams.findUnique({
       where: { id },
       include: {
-        manager: {
+        team_members_teams_manager_idToteam_members: {
           select: {
             id: true,
             first_name: true,
@@ -435,7 +436,7 @@ export class TeamService {
             position: true,
           },
         },
-        members: {
+        team_members_team_members_team_idToteams: {
           select: {
             id: true,
             first_name: true,
@@ -448,7 +449,7 @@ export class TeamService {
         },
         team_project_assignments: {
           select: {
-            project: {
+            projects: {
               select: {
                 id: true,
                 title: true,
@@ -504,7 +505,7 @@ export class TeamService {
         where,
         orderBy,
         include: {
-          manager: {
+          team_members_teams_manager_idToteam_members: {
             select: {
               id: true,
               first_name: true,
@@ -514,7 +515,7 @@ export class TeamService {
           },
           _count: {
             select: {
-              members: true,
+              team_members_team_members_team_idToteams: true,
               team_project_assignments: true,
             },
           },
@@ -551,7 +552,7 @@ export class TeamService {
         updated_at: new Date(),
       },
       include: {
-        manager: {
+        team_members_teams_manager_idToteam_members: {
           select: {
             id: true,
             first_name: true,
@@ -561,7 +562,7 @@ export class TeamService {
         },
         _count: {
           select: {
-            members: true,
+            team_members_team_members_team_idToteams: true,
             team_project_assignments: true,
           },
         },
@@ -578,7 +579,7 @@ export class TeamService {
       include: {
         _count: {
           select: {
-            members: true,
+            team_members_team_members_team_idToteams: true,
             team_project_assignments: true,
           },
         },
@@ -589,9 +590,9 @@ export class TeamService {
       throw new NotFoundError('Team not found');
     }
 
-    if (team._count.members > 0) {
+    if (team._count.team_members_team_members_team_idToteams > 0) {
       throw new ConflictError(
-        `Cannot delete team with ${team._count.members} member(s). Please remove members first.`
+        `Cannot delete team with ${team._count.team_members_team_members_team_idToteams} member(s). Please remove members first.`
       );
     }
 

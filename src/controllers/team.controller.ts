@@ -93,9 +93,11 @@ export class TeamController {
     try {
       const data: AssignProjectInput = req.body;
       const assignment = await teamService.assignProject(data);
+      console.log('Project assigned:', assignment);
       
       return successResponse(res, assignment, 'Project assigned successfully', 201);
     } catch (error) {
+      console.log(error)
       next(error);
     }
   }

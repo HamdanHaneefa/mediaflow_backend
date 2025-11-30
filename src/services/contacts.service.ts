@@ -61,7 +61,7 @@ export class ContactsService {
         updated_at: new Date(),
       },
       include: {
-        projects_as_client: {
+        projects: {
           select: {
             id: true,
             title: true,
@@ -70,8 +70,8 @@ export class ContactsService {
         },
         _count: {
           select: {
-            projects_as_client: true,
-            tasks_assigned: true,
+            projects: true,
+            tasks: true,
             proposals: true,
           },
         },
@@ -85,7 +85,7 @@ export class ContactsService {
     const contact = await prisma.contacts.findUnique({
       where: { id },
       include: {
-        projects_as_client: {
+        projects: {
           select: {
             id: true,
             title: true,
@@ -96,7 +96,7 @@ export class ContactsService {
           },
           orderBy: { created_at: 'desc' },
         },
-        tasks_assigned: {
+        tasks: {
           select: {
             id: true,
             title: true,
@@ -119,10 +119,10 @@ export class ContactsService {
         },
         _count: {
           select: {
-            projects_as_client: true,
-            tasks_assigned: true,
+            projects: true,
+            tasks: true,
             proposals: true,
-            income_records: true,
+            income: true,
           },
         },
       },
@@ -185,8 +185,8 @@ export class ContactsService {
         include: {
           _count: {
             select: {
-              projects_as_client: true,
-              tasks_assigned: true,
+              projects: true,
+              tasks: true,
               proposals: true,
             },
           },
@@ -234,8 +234,8 @@ export class ContactsService {
       include: {
         _count: {
           select: {
-            projects_as_client: true,
-            tasks_assigned: true,
+            projects: true,
+            tasks: true,
             proposals: true,
           },
         },
@@ -252,8 +252,8 @@ export class ContactsService {
       include: {
         _count: {
           select: {
-            projects_as_client: true,
-            tasks_assigned: true,
+            projects: true,
+            tasks: true,
             proposals: true,
           },
         },
@@ -265,9 +265,9 @@ export class ContactsService {
     }
 
     // Check if contact has dependencies
-    if (contact._count.projects_as_client > 0) {
+    if (contact._count.projects > 0) {
       throw new ConflictError(
-        `Cannot delete contact with ${contact._count.projects_as_client} associated project(s)`
+        `Cannot delete contact with ${contact._count.projects} associated project(s)`
       );
     }
 

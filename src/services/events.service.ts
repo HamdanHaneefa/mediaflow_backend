@@ -75,7 +75,7 @@ export class EventsService {
       const event = await prisma.events.create({
         data: eventData,
         include: {
-          project: {
+          projects: {
             select: {
               id: true,
               name: true,
@@ -103,7 +103,7 @@ export class EventsService {
     const event = await prisma.events.findUnique({
       where: { id },
       include: {
-        project: {
+        projects: {
           select: {
             id: true,
             name: true,
@@ -189,7 +189,7 @@ export class EventsService {
         {
           where,
           include: {
-            project: {
+            projects: {
               select: {
                 id: true,
                 name: true,
@@ -298,7 +298,7 @@ export class EventsService {
         where: { id },
         data: updateData,
         include: {
-          project: {
+          projects: {
             select: {
               id: true,
               name: true,
@@ -340,7 +340,7 @@ export class EventsService {
         where: { id },
         data: { status },
         include: {
-          project: {
+          projects: {
             select: {
               id: true,
               name: true,
@@ -421,7 +421,7 @@ export class EventsService {
     const conflicts = await prisma.events.findMany({
       where,
       include: {
-        project: {
+        projects: {
           select: {
             id: true,
             name: true,
@@ -453,7 +453,7 @@ export class EventsService {
         take: 5,
         orderBy: { created_at: 'desc' },
         include: {
-          project: {
+          projects: {
             select: {
               id: true,
               name: true,
@@ -478,7 +478,7 @@ export class EventsService {
     const events = await prisma.events.findMany({
       where: { project_id: projectId },
       include: {
-        project: {
+        projects: {
           select: {
             id: true,
             name: true,
@@ -501,7 +501,7 @@ export class EventsService {
         ]
       },
       include: {
-        project: {
+        projects: {
           select: {
             id: true,
             name: true,

@@ -7,13 +7,12 @@ const prisma = new PrismaClient();
 
 // Lead Service
 export class LeadService {
-  async create(data: any, createdBy: string) {
+  async create(data: any) {
     const lead = await prisma.leads.create({
       data: {
         ...data,
         status: data.status || 'New',
         score: data.score || 0,
-        created_by: createdBy,
       },
     });
 

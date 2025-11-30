@@ -41,7 +41,7 @@ export class TasksService {
         updated_at: new Date(),
       },
       include: {
-        project: {
+        projects: {
           select: {
             id: true,
             title: true,
@@ -65,7 +65,7 @@ export class TasksService {
     const task = await prisma.tasks.findUnique({
       where: { id },
       include: {
-        project: {
+        projects: {
           select: {
             id: true,
             title: true,
@@ -158,7 +158,7 @@ export class TasksService {
         where,
         orderBy,
         include: {
-          project: {
+          projects: {
             select: {
               id: true,
               title: true,
@@ -222,7 +222,7 @@ export class TasksService {
         updated_at: new Date(),
       },
       include: {
-        project: {
+        projects: {
           select: {
             id: true,
             title: true,

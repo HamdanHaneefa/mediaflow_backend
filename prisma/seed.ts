@@ -258,6 +258,7 @@ async function main() {
   console.log('📁 Creating projects...');
   const project1 = await prisma.projects.create({
     data: {
+      name: 'TechCorp Product Launch Video',
       title: 'TechCorp Product Launch Video',
       description: 'High-end commercial for new product launch. 60-second spot for TV and digital.',
       type: 'Commercial',
@@ -273,6 +274,7 @@ async function main() {
 
   const project2 = await prisma.projects.create({
     data: {
+      name: 'Fashion Forward Spring Collection',
       title: 'Fashion Forward Spring Collection',
       description: 'Social media video series showcasing spring fashion collection. 10 short videos.',
       type: 'Commercial',
@@ -288,6 +290,7 @@ async function main() {
 
   const project3 = await prisma.projects.create({
     data: {
+      name: 'Corporate Training Series',
       title: 'Corporate Training Series',
       description: 'Internal training video series for TechCorp employees. 5 modules.',
       type: 'Corporate',
@@ -303,6 +306,7 @@ async function main() {
 
   const project4 = await prisma.projects.create({
     data: {
+      name: 'Music Video - Local Artist',
       title: 'Music Video - Local Artist',
       description: 'Creative music video for emerging artist',
       type: 'Music Video',

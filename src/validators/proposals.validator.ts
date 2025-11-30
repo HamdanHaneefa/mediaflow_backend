@@ -159,6 +159,17 @@ export const listProposalsSchema = z.object({
   }),
 });
 
+export const updateProposalStatusSchema = z.object({
+  params: z.object({
+    id: z.string().uuid('Invalid proposal ID'),
+  }),
+  body: z.object({
+    status: z.enum(['Draft', 'Sent', 'Viewed', 'Accepted', 'Rejected', 'Expired'], {
+      required_error: 'Status is required',
+    }),
+  }),
+});
+
 export const sendProposalSchema = z.object({
   params: z.object({
     id: z.string().uuid('Invalid proposal ID'),

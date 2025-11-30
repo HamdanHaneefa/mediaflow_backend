@@ -77,7 +77,7 @@ export class ProjectsService {
         updated_at: new Date(),
       },
       include: {
-        client: {
+        contacts: {
           select: {
             id: true,
             name: true,
@@ -102,7 +102,7 @@ export class ProjectsService {
     const project = await prisma.projects.findUnique({
       where: { id },
       include: {
-        client: {
+        contacts: {
           select: {
             id: true,
             name: true,
@@ -250,7 +250,7 @@ export class ProjectsService {
         where,
         orderBy,
         include: {
-          client: {
+          contacts: {
             select: {
               id: true,
               name: true,
@@ -316,7 +316,7 @@ export class ProjectsService {
         updated_at: new Date(),
       },
       include: {
-        client: {
+        contacts: {
           select: {
             id: true,
             name: true,

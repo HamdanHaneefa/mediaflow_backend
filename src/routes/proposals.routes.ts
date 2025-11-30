@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { authenticate } from '../middleware/auth.middleware';
-import { validateRequest } from '../middleware/validation.middleware';
+import { validate } from '../middleware/validation.middleware';
 import {
   createLeadSchema,
   updateLeadSchema,
@@ -45,14 +45,14 @@ const router = Router();
  * @desc    Create a new lead
  * @access  Private
  */
-router.post('/leads', authenticate, validateRequest(createLeadSchema), createLead);
+router.post('/leads', authenticate, validate(createLeadSchema), createLead);
 
 /**
  * @route   GET /api/proposals/leads
  * @desc    Get all leads with filtering and pagination
  * @access  Private
  */
-router.get('/leads', authenticate, validateRequest(listLeadsSchema, 'query'), listLeads);
+router.get('/leads', authenticate, validate(listLeadsSchema), listLeads);
 
 /**
  * @route   GET /api/proposals/leads/stats
@@ -73,7 +73,7 @@ router.get('/leads/:id', authenticate, getLead);
  * @desc    Update a lead
  * @access  Private
  */
-router.put('/leads/:id', authenticate, validateRequest(updateLeadSchema), updateLead);
+router.put('/leads/:id', authenticate, validate(updateLeadSchema), updateLead);
 
 /**
  * @route   DELETE /api/proposals/leads/:id
@@ -90,7 +90,7 @@ router.delete('/leads/:id', authenticate, deleteLead);
 router.post(
   '/leads/:id/convert',
   authenticate,
-  validateRequest(convertLeadSchema),
+  validate(convertLeadSchema),
   convertLead
 );
 
@@ -101,14 +101,14 @@ router.post(
  * @desc    Create a new proposal
  * @access  Private
  */
-router.post('/', authenticate, validateRequest(createProposalSchema), createProposal);
+router.post('/', authenticate, validate(createProposalSchema), createProposal);
 
 /**
  * @route   GET /api/proposals
  * @desc    Get all proposals with filtering and pagination
  * @access  Private
  */
-router.get('/', authenticate, validateRequest(listProposalsSchema, 'query'), listProposals);
+router.get('/', authenticate, validate(listProposalsSchema), listProposals);
 
 /**
  * @route   GET /api/proposals/stats
@@ -129,7 +129,7 @@ router.get('/:id', authenticate, getProposal);
  * @desc    Update a proposal
  * @access  Private
  */
-router.put('/:id', authenticate, validateRequest(updateProposalSchema), updateProposal);
+router.put('/:id', authenticate, validate(updateProposalSchema), updateProposal);
 
 /**
  * @route   PATCH /api/proposals/:id/status
@@ -139,7 +139,7 @@ router.put('/:id', authenticate, validateRequest(updateProposalSchema), updatePr
 router.patch(
   '/:id/status',
   authenticate,
-  validateRequest(updateProposalStatusSchema),
+  validate(updateProposalStatusSchema),
   updateProposalStatus
 );
 
@@ -162,7 +162,7 @@ router.post('/:id/pdf', authenticate, generateProposalPDF);
  * @desc    Send proposal via email
  * @access  Private
  */
-router.post('/:id/send', authenticate, validateRequest(sendProposalSchema), sendProposal);
+router.post('/:id/send', authenticate, validate(sendProposalSchema), sendProposal);
 
 // ==================== PUBLIC ROUTES ====================
 
@@ -180,7 +180,7 @@ router.get('/public/:token', viewPublicProposal);
  */
 router.post(
   '/public/:token/sign',
-  validateRequest(signProposalSchema),
+  validate(signProposalSchema),
   signProposal
 );
 
@@ -191,7 +191,7 @@ router.post(
  */
 router.post(
   '/public/:token/track',
-  validateRequest(trackProposalViewSchema),
+  validate(trackProposalViewSchema),
   trackProposalView
 );
 

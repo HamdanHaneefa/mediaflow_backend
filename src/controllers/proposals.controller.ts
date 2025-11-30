@@ -15,7 +15,10 @@ const emailService = new EmailService();
 
 export const createLead = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = req.user!.userId;
+    if (!req.user || !req.user.id) {
+      throw new Error('User not authenticated');
+    }
+    const userId = req.user.id;
     const lead = await leadService.create({ ...req.body, created_by: userId });
     successResponse(res, lead, 'Lead created successfully', 201);
   } catch (error) {
@@ -61,7 +64,7 @@ export const deleteLead = async (req: Request, res: Response, next: NextFunction
 
 export const convertLead = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = req.user!.userId;
+    const userId = req.user!.id;
     const result = await leadService.convert(req.params.id, {
       ...req.body,
       converted_by: userId,
@@ -85,7 +88,7 @@ export const getLeadStats = async (req: Request, res: Response, next: NextFuncti
 
 export const createProposal = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = req.user!.userId;
+    const userId = req.user!.id;
     const proposal = await proposalService.create({ ...req.body, created_by: userId });
     successResponse(res, proposal, 'Proposal created successfully', 201);
   } catch (error) {

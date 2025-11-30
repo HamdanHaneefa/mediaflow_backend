@@ -190,7 +190,7 @@ export class AnalyticsService {
         id: true,
         title: true,
         status: true,
-        client: { select: { name: true } },
+        contacts: { select: { name: true } },
       },
     });
 

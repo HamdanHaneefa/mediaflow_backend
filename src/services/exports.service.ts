@@ -128,7 +128,7 @@ export class ExportsService {
         return prisma.income.findMany({
           where: { ...dateFilter, ...filters },
           include: {
-            client: { select: { name: true } },
+            contacts: { select: { name: true } },
             project: { select: { title: true } },
             invoice: { select: { invoice_number: true } },
           },
@@ -159,7 +159,7 @@ export class ExportsService {
             ...filters,
           },
           include: {
-            client: { select: { name: true } },
+            contacts: { select: { name: true } },
             project: { select: { title: true } },
           },
           orderBy: { created_at: 'desc' },
@@ -179,7 +179,7 @@ export class ExportsService {
             ...filters,
           },
           include: {
-            client: { select: { name: true } },
+            contacts: { select: { name: true } },
           },
           orderBy: { created_at: 'desc' },
         });
@@ -264,7 +264,7 @@ export class ExportsService {
       prisma.income.findMany({
         where: { ...dateFilter, ...filters },
         include: {
-          client: { select: { name: true } },
+          contacts: { select: { name: true } },
           project: { select: { title: true } },
         },
         orderBy: { date: 'desc' },
@@ -280,7 +280,7 @@ export class ExportsService {
       prisma.invoices.findMany({
         where: filters,
         include: {
-          client: { select: { name: true } },
+          contacts: { select: { name: true } },
           project: { select: { title: true } },
         },
         orderBy: { created_at: 'desc' },
@@ -296,7 +296,7 @@ export class ExportsService {
       prisma.projects.findMany({
         where: filters,
         include: {
-          client: { select: { name: true } },
+          contacts: { select: { name: true } },
         },
         orderBy: { created_at: 'desc' },
       }),
