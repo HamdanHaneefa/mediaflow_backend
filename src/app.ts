@@ -23,6 +23,7 @@ import proposalsRoutes from './routes/proposals.routes';
 import analyticsRoutes from './routes/analytics.routes';
 import reportsRoutes from './routes/reports.routes';
 import exportsRoutes from './routes/exports.routes';
+import eventsRoutes from './routes/events.routes';
 // Client Portal routes
 import clientAuthRoutes from './routes/client-auth.routes';
 import clientPortalRoutes from './routes/client-portal.routes';
@@ -83,6 +84,7 @@ app.use('/api/proposals', proposalsRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/reports', reportsRoutes);
 app.use('/api/exports', exportsRoutes);
+app.use('/api/events', eventsRoutes);
 // Client Portal routes
 app.use('/api/client/auth', apiLimiter, clientAuthRoutes);
 app.use('/api/client/portal', clientPortalRoutes);
