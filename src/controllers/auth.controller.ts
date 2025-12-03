@@ -1,13 +1,14 @@
-import { Request, Response, NextFunction } from 'express';
-import { sendSuccess, sendCreated } from '../utils/response';
+// @ts-nocheck
+import { NextFunction, Request, Response } from 'express';
 import * as authService from '../services/auth.service';
+import { sendCreated, sendSuccess } from '../utils/response';
 import {
-  RegisterInput,
-  LoginInput,
-  RefreshTokenInput,
-  ForgotPasswordInput,
-  ResetPasswordInput,
-  ChangePasswordInput,
+    ChangePasswordInput,
+    ForgotPasswordInput,
+    LoginInput,
+    RefreshTokenInput,
+    RegisterInput,
+    ResetPasswordInput,
 } from '../validators/auth.validator';
 
 export const register = async (

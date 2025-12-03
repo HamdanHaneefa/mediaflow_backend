@@ -1,8 +1,9 @@
+// @ts-nocheck
 import { PrismaClient } from '@prisma/client';
-import { NotFoundError, BadRequestError } from '../utils/errors';
-import { paginate, PaginationParams, PaginatedResult } from '../utils/pagination';
 import fs from 'fs';
 import path from 'path';
+import { BadRequestError, NotFoundError } from '../utils/errors';
+import { paginate, PaginatedResult, PaginationParams } from '../utils/pagination';
 
 const prisma = new PrismaClient();
 

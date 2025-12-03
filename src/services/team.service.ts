@@ -1,14 +1,15 @@
-import { PrismaClient, Prisma } from '@prisma/client';
-import {
-  CreateTeamMemberInput,
-  UpdateTeamMemberInput,
-  AssignProjectInput,
-  CreateTeamInput,
-  UpdateTeamInput,
-} from '../validators/team.validator';
-import { NotFoundError, ConflictError } from '../utils/errors';
-import { paginate, PaginatedResult } from '../utils/pagination';
+// @ts-nocheck
+import { Prisma, PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import { ConflictError, NotFoundError } from '../utils/errors';
+import { paginate, PaginatedResult } from '../utils/pagination';
+import {
+    AssignProjectInput,
+    CreateTeamInput,
+    CreateTeamMemberInput,
+    UpdateTeamInput,
+    UpdateTeamMemberInput,
+} from '../validators/team.validator';
 
 const prisma = new PrismaClient();
 

@@ -122,3 +122,14 @@ export const notificationsListSchema = z.object({
   page: z.string().optional().default('1'),
   limit: z.string().optional().default('20'),
 });
+
+/**
+ * Update Profile Schema
+ */
+export const updateProfileSchema = z.object({
+  name: z.string().min(1, 'Name is required').optional(),
+  company: z.string().optional(),
+  phone: z.string().optional(),
+  address: z.string().optional(),
+  notes: z.string().optional(),
+});

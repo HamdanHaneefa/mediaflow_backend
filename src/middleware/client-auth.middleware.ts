@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
+import { NextFunction, Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
 import { UnauthorizedError } from '../utils/errors';
 
 const prisma = new PrismaClient();
@@ -68,7 +68,7 @@ export const authenticateClient = async (
     const clientUser = await prisma.client_users.findUnique({
       where: { id: decoded.clientUserId },
       include: {
-        contact: true,
+        contacts: true,
       },
     });
 
@@ -85,7 +85,7 @@ export const authenticateClient = async (
       id: clientUser.id,
       contactId: clientUser.contact_id,
       email: clientUser.email,
-      contact: clientUser.contact,
+      contact: clientUser.contacts,
     };
 
     next();

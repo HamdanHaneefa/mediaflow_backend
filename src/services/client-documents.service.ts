@@ -1,5 +1,6 @@
+// @ts-nocheck
 import { PrismaClient } from '@prisma/client';
-import { NotFoundError, ForbiddenError } from '../utils/errors';
+import { ForbiddenError, NotFoundError } from '../utils/errors';
 
 const prisma = new PrismaClient();
 

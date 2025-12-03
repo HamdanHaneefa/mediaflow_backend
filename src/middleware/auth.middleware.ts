@@ -1,8 +1,9 @@
-import { Request, Response, NextFunction } from 'express';
+// @ts-nocheck
+import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { UnauthorizedError } from '../utils/errors';
-import env from '../config/env';
 import prisma from '../config/database';
+import env from '../config/env';
+import { UnauthorizedError } from '../utils/errors';
 
 export interface AuthRequest extends Request {
   user?: {

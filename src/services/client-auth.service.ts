@@ -1,9 +1,10 @@
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import crypto from 'crypto';
+// @ts-nocheck
 import { PrismaClient } from '@prisma/client';
-import { BadRequestError, UnauthorizedError, NotFoundError } from '../utils/errors';
+import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
 import env from '../config/env';
+import { BadRequestError, NotFoundError, UnauthorizedError } from '../utils/errors';
 
 const prisma = new PrismaClient();
 

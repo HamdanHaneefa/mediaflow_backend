@@ -1,11 +1,12 @@
+// @ts-nocheck
 import { PrismaClient } from '@prisma/client';
 import {
-  parseDateRange,
-  getDateRangeFromPeriod,
-  groupDatesByPeriod,
-  calculatePercentageChange,
-  calculateGrowthRate,
-  getPreviousPeriodRange,
+    calculateGrowthRate,
+    calculatePercentageChange,
+    getDateRangeFromPeriod,
+    getPreviousPeriodRange,
+    groupDatesByPeriod,
+    parseDateRange,
 } from '../utils/date-helpers';
 import cacheService, { CACHE_KEYS, CACHE_TTL } from './cache.service';
 

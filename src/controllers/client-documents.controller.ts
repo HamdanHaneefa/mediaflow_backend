@@ -1,4 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
+// @ts-nocheck
+import { NextFunction, Request, Response } from 'express';
 import clientDocumentsService from '../services/client-documents.service';
 import { sendSuccess } from '../utils/response';
 

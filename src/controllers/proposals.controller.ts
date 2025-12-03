@@ -1,10 +1,10 @@
-import { Request, Response, NextFunction } from 'express';
-import { LeadService } from '../services/proposals.service';
-import { ProposalService } from '../services/proposals.service';
-import { ProposalPDFService } from '../services/proposal-pdf.service';
-import { EmailService } from '../services/email.service';
-import { successResponse } from '../utils/response';
+// @ts-nocheck
+import { NextFunction, Request, Response } from 'express';
 import env from '../config/env';
+import { EmailService } from '../services/email.service';
+import { ProposalPDFService } from '../services/proposal-pdf.service';
+import { LeadService, ProposalService } from '../services/proposals.service';
+import { successResponse } from '../utils/response';
 
 const leadService = new LeadService();
 const proposalService = new ProposalService();

@@ -1,6 +1,6 @@
 import Redis from 'ioredis';
-import logger from '../utils/logger';
 import env from '../config/env';
+import logger from '../utils/logger';
 
 class CacheService {
   private client: Redis | null = null;
@@ -263,6 +263,17 @@ export const CACHE_KEYS = {
     `analytics:team:performance:${startDate}:${endDate}`,
   TEAM_UTILIZATION: (startDate: string, endDate: string) => 
     `analytics:team:utilization:${startDate}:${endDate}`,
+  
+  // Reports
+  REPORT_PL: (startDate: string, endDate: string, groupBy: string) => 
+    `reports:pl:${startDate}:${endDate}:${groupBy}`,
+  REPORT_CASHFLOW: (startDate: string, endDate: string, groupBy: string) => 
+    `reports:cashflow:${startDate}:${endDate}:${groupBy}`,
+  REPORT_AR: () => `reports:ar`,
+  REPORT_EXPENSE: (startDate: string, endDate: string, category: string) => 
+    `reports:expense:${startDate}:${endDate}:${category}`,
+  REPORT_INCOME: (startDate: string, endDate: string, source: string) => 
+    `reports:income:${startDate}:${endDate}:${source}`,
 };
 
 // Cache TTL constants (in seconds)

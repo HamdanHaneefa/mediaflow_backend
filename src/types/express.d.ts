@@ -1,4 +1,3 @@
-import { Request } from 'express';
 
 // Extend Express Request to include user
 declare global {
@@ -10,8 +9,20 @@ declare global {
         role: string;
         permissions: Record<string, any>;
       };
+      clientUser?: {
+        id: string;
+        email: string;
+        contactId: string;
+        isVerified: boolean;
+        contact: {
+          id: string;
+          name: string;
+          company: string | null;
+        };
+      };
     }
   }
 }
 
-export {};
+export { };
+

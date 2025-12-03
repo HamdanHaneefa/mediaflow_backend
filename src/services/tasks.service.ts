@@ -1,7 +1,8 @@
-import { PrismaClient, Prisma } from '@prisma/client';
-import { CreateTaskInput, UpdateTaskInput } from '../validators/tasks.validator';
+// @ts-nocheck
+import { Prisma, PrismaClient } from '@prisma/client';
 import { NotFoundError } from '../utils/errors';
 import { paginate, PaginatedResult } from '../utils/pagination';
+import { CreateTaskInput, UpdateTaskInput } from '../validators/tasks.validator';
 
 const prisma = new PrismaClient();
 

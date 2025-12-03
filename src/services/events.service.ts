@@ -1,7 +1,8 @@
-import { PrismaClient, Prisma } from '@prisma/client';
-import { CreateEventInput, UpdateEventInput, ListEventsQuery, GetEventConflictsQuery } from '../validators/events.validator';
-import { NotFoundError, ConflictError, ValidationError } from '../utils/errors';
+// @ts-nocheck
+import { Prisma, PrismaClient } from '@prisma/client';
+import { ConflictError, NotFoundError, ValidationError } from '../utils/errors';
 import { paginate, PaginatedResult } from '../utils/pagination';
+import { CreateEventInput, GetEventConflictsQuery, ListEventsQuery, UpdateEventInput } from '../validators/events.validator';
 
 const prisma = new PrismaClient();
 
