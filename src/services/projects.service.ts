@@ -75,6 +75,8 @@ export class ProjectsService {
     const project = await prisma.projects.create({
       data: {
         ...projectData,
+        // Ensure required 'name' column is set (maps from title)
+        name: projectData.title ?? 'Untitled',
         updated_at: new Date(),
       },
       include: {

@@ -3,10 +3,11 @@ module.exports = {
     {
       name: 'mediaflow-api',
       script: './dist/server.js',
-      instances: 2,
-      exec_mode: 'cluster',
+      instances: 1,
+      exec_mode: 'fork',
       watch: false,
       max_memory_restart: '1G',
+      pre_start: 'npm run build',
       env: {
         NODE_ENV: 'production',
         PORT: 4000,
