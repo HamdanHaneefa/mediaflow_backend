@@ -438,6 +438,127 @@ export class ProjectsService {
       teamMembers: teamMemberCount,
     };
   }
+
+  async addTeamMember(projectId: string, teamMemberId: string) {
+    // Check if project exists
+    const project = await prisma.projects.findUnique({
+      where: { id: projectId },
+      select: { id: true, team_members: true }
+    });
+
+    if (!project) {
+      throw new NotFoundError('Project not found');
+    }
+
+    // Check if team member exists (check in contacts since tasks are assigned to contacts)
+    const teamMember = await prisma.contacts.findUnique({
+      where: { id: teamMemberId },
+    });
+
+    if (!teamMember) {
+      throw new NotFoundError('Team member not found');
+    }
+
+    // Check if team member is already assigned
+    if (project.team_members.includes(teamMemberId)) {
+      throw new Error('Team member is already assigned to this project');
+    }
+
+    // Add team member to project
+    const updatedProject = await prisma.projects.update({
+      where: { id: projectId },
+      data: {
+        team_members: [...project.team_members, teamMemberId],
+        updated_at: new Date(),
+      },
+      include: {
+        contacts: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            company: true,
+          },
+        },
+      },
+    });
+
+    return transformProject(updatedProject);
+  }
+
+  async removeTeamMember(projectId: string, teamMemberId: string) {
+    // Check if project exists
+    const project = await prisma.projects.findUnique({
+      where: { id: projectId },
+      select: { id: true, team_members: true }
+    });
+
+    if (!project) {
+      throw new NotFoundError('Project not found');
+    }
+
+    // Check if team member is assigned
+    if (!project.team_members.includes(teamMemberId)) {
+      throw new Error('Team member is not assigned to this project');
+    }
+
+    // Remove team member from project
+    const updatedProject = await prisma.projects.update({
+      where: { id: projectId },
+      data: {
+        team_members: project.team_members.filter(id => id !== teamMemberId),
+        updated_at: new Date(),
+      },
+      include: {
+        contacts: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            company: true,
+          },
+        },
+      },
+    });
+
+    return transformProject(updatedProject);
+  }
+
+  async getProjectTeamMembers(projectId: string) {
+    const project = await prisma.projects.findUnique({
+      where: { id: projectId },
+      select: {
+        id: true,
+        team_members: true,
+      },
+    });
+
+    if (!project) {
+      throw new NotFoundError('Project not found');
+    }
+
+    if (project.team_members.length === 0) {
+      return [];
+    }
+
+    // Get team member details
+    const teamMembers = await prisma.contacts.findMany({
+      where: {
+        id: { in: project.team_members }
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        company: true,
+        role: true,
+        status: true,
+      },
+    });
+
+    return teamMembers;
+  }
 }
 
 export default new ProjectsService();

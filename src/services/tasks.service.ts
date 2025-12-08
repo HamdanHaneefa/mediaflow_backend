@@ -9,17 +9,19 @@ const prisma = new PrismaClient();
 export class TasksService {
   async createTask(data: CreateTaskInput) {
     // Validate project exists if provided
+    let project = null;
     if (data.project_id) {
-      const projectExists = await prisma.projects.findUnique({
+      project = await prisma.projects.findUnique({
         where: { id: data.project_id },
+        select: { id: true, title: true, team_members: true }
       });
 
-      if (!projectExists) {
+      if (!project) {
         throw new NotFoundError('Project not found');
       }
     }
 
-    // Validate assignee exists if provided
+    // Validate assignee exists and is part of project team if both are provided
     if (data.assigned_to) {
       const assigneeExists = await prisma.contacts.findUnique({
         where: { id: data.assigned_to },
@@ -27,6 +29,13 @@ export class TasksService {
 
       if (!assigneeExists) {
         throw new NotFoundError('Assignee not found');
+      }
+
+      // If project is specified, check if assignee is part of project team
+      if (project && project.team_members && project.team_members.length > 0) {
+        if (!project.team_members.includes(data.assigned_to)) {
+          throw new Error(`Team member is not assigned to project "${project.title}"`);
+        }
       }
     }
 
@@ -49,7 +58,7 @@ export class TasksService {
             status: true,
           },
         },
-        assignee: {
+        contacts: {
           select: {
             id: true,
             name: true,
@@ -81,7 +90,7 @@ export class TasksService {
             },
           },
         },
-        assignee: {
+        contacts: {
           select: {
             id: true,
             name: true,
@@ -166,7 +175,7 @@ export class TasksService {
               status: true,
             },
           },
-          assignee: {
+          contacts: {
             select: {
               id: true,
               name: true,
@@ -189,17 +198,25 @@ export class TasksService {
     }
 
     // Validate project exists if provided
+    let project = null;
     if (data.project_id) {
-      const projectExists = await prisma.projects.findUnique({
+      project = await prisma.projects.findUnique({
         where: { id: data.project_id },
+        select: { id: true, title: true, team_members: true }
       });
 
-      if (!projectExists) {
+      if (!project) {
         throw new NotFoundError('Project not found');
       }
+    } else if (existingTask.project_id) {
+      // If updating assignment but not changing project, get existing project
+      project = await prisma.projects.findUnique({
+        where: { id: existingTask.project_id },
+        select: { id: true, title: true, team_members: true }
+      });
     }
 
-    // Validate assignee exists if provided
+    // Validate assignee exists and is part of project team if both are provided
     if (data.assigned_to) {
       const assigneeExists = await prisma.contacts.findUnique({
         where: { id: data.assigned_to },
@@ -207,6 +224,13 @@ export class TasksService {
 
       if (!assigneeExists) {
         throw new NotFoundError('Assignee not found');
+      }
+
+      // If project is specified, check if assignee is part of project team
+      if (project && project.team_members && project.team_members.length > 0) {
+        if (!project.team_members.includes(data.assigned_to)) {
+          throw new Error(`Team member is not assigned to project "${project.title}"`);
+        }
       }
     }
 
@@ -230,7 +254,7 @@ export class TasksService {
             status: true,
           },
         },
-        assignee: {
+        contacts: {
           select: {
             id: true,
             name: true,

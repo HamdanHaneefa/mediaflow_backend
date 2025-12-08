@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import projectsService from '../services/projects.service';
 import { successResponse } from '../utils/response';
 import { CreateProjectInput, UpdateProjectInput } from '../validators/projects.validator';
@@ -85,6 +85,53 @@ export class ProjectsController {
       const stats = await projectsService.getProjectStats(id);
       
       return successResponse(res, stats, 'Project stats retrieved successfully');
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async addTeamMember(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const { user_id, teamMemberId, role } = req.body;
+      
+      // Support both user_id (frontend) and teamMemberId naming
+      const memberId = user_id || teamMemberId;
+      
+      if (!memberId) {
+        return res.status(400).json({
+          success: false,
+          message: 'user_id or teamMemberId is required'
+        });
+      }
+      
+      const project = await projectsService.addTeamMember(id, memberId);
+      
+      return successResponse(res, project, 'Team member added to project successfully');
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async removeTeamMember(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id, teamMemberId } = req.params;
+      
+      const project = await projectsService.removeTeamMember(id, teamMemberId);
+      
+      return successResponse(res, project, 'Team member removed from project successfully');
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getTeamMembers(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      
+      const teamMembers = await projectsService.getProjectTeamMembers(id);
+      
+      return successResponse(res, teamMembers, 'Project team members retrieved successfully');
     } catch (error) {
       next(error);
     }

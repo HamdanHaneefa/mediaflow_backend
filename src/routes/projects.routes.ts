@@ -3,10 +3,10 @@ import projectsController from '../controllers/projects.controller';
 import { authenticate } from '../middleware/auth.middleware';
 import { validate } from '../middleware/validation.middleware';
 import {
-  createProjectSchema,
-  updateProjectSchema,
-  getProjectSchema,
-  listProjectsSchema,
+    createProjectSchema,
+    getProjectSchema,
+    listProjectsSchema,
+    updateProjectSchema,
 } from '../validators/projects.validator';
 
 const router = Router();
@@ -78,6 +78,36 @@ router.delete(
   '/:id',
   validate(getProjectSchema),
   projectsController.delete
+);
+
+/**
+ * @route   POST /api/projects/:id/members
+ * @desc    Add team member to project
+ * @access  Private
+ */
+router.post(
+  '/:id/members',
+  projectsController.addTeamMember
+);
+
+/**
+ * @route   GET /api/projects/:id/members
+ * @desc    Get project team members
+ * @access  Private
+ */
+router.get(
+  '/:id/members',
+  projectsController.getTeamMembers
+);
+
+/**
+ * @route   DELETE /api/projects/:id/members/:teamMemberId
+ * @desc    Remove team member from project
+ * @access  Private
+ */
+router.delete(
+  '/:id/members/:teamMemberId',
+  projectsController.removeTeamMember
 );
 
 export default router;
