@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { Prisma, PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-import { ConflictError, NotFoundError } from '../utils/errors';
+import { ConflictError, ForbiddenError, NotFoundError } from '../utils/errors';
 import { paginate, PaginatedResult } from '../utils/pagination';
 import {
     AssignProjectInput,
@@ -214,6 +214,11 @@ export class TeamService {
       throw new NotFoundError('Team member not found');
     }
 
+    // Protect MediaFlow admin account from updates
+    if (existingMember.email === 'admin@mediaflow.com') {
+      throw new ForbiddenError('MediaFlow admin account cannot be modified for security reasons');
+    }
+
     // If email is being updated, check if new email already exists
     if (data.email && data.email !== existingMember.email) {
       const emailExists = await prisma.team_members.findUnique({
@@ -280,6 +285,11 @@ export class TeamService {
 
     if (!member) {
       throw new NotFoundError('Team member not found');
+    }
+
+    // Protect MediaFlow admin account from deletion
+    if (member.email === 'admin@mediaflow.com') {
+      throw new ForbiddenError('MediaFlow admin account cannot be deleted for security reasons');
     }
 
     // Check if member has active assignments

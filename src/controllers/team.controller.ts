@@ -1,12 +1,12 @@
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import teamService from '../services/team.service';
 import { successResponse } from '../utils/response';
 import {
-  CreateTeamMemberInput,
-  UpdateTeamMemberInput,
-  AssignProjectInput,
-  CreateTeamInput,
-  UpdateTeamInput,
+    AssignProjectInput,
+    CreateTeamInput,
+    CreateTeamMemberInput,
+    UpdateTeamInput,
+    UpdateTeamMemberInput,
 } from '../validators/team.validator';
 
 export class TeamController {
@@ -69,6 +69,17 @@ export class TeamController {
     try {
       const { id } = req.params;
       const data: UpdateTeamMemberInput = req.body;
+      
+      // First check if this is the MediaFlow admin account
+      const existingMember = await teamService.getTeamMember(id);
+      if (existingMember && existingMember.email === 'admin@mediaflow.com') {
+        return res.status(403).json({
+          success: false,
+          message: 'MediaFlow admin account cannot be modified for security reasons',
+          error: 'PROTECTED_ACCOUNT'
+        });
+      }
+      
       const member = await teamService.updateTeamMember(id, data);
       
       return successResponse(res, member, 'Team member updated successfully');
@@ -80,6 +91,17 @@ export class TeamController {
   async deleteMember(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
+      
+      // First check if this is the MediaFlow admin account
+      const existingMember = await teamService.getTeamMember(id);
+      if (existingMember && existingMember.email === 'admin@mediaflow.com') {
+        return res.status(403).json({
+          success: false,
+          message: 'MediaFlow admin account cannot be deleted for security reasons',
+          error: 'PROTECTED_ACCOUNT'
+        });
+      }
+      
       const result = await teamService.deleteTeamMember(id);
       
       return successResponse(res, result, 'Team member deactivated successfully');

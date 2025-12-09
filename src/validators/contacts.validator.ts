@@ -10,7 +10,7 @@ export const createContactSchema = z.object({
     phone: z.string().optional().nullable(),
     company: z.string().optional().nullable(),
     role: z.enum(['Client', 'Vendor', 'Freelancer', 'Partner']).default('Client'),
-    status: z.enum(['Active', 'Inactive', 'Pending']).default('Active'),
+    status: z.enum(['Active', 'Inactive', 'Pending', 'Prospect']).default('Active'),
     notes: z.string().optional().nullable(),
     tags: z.array(z.string()).default([]),
   }).refine(
@@ -31,7 +31,7 @@ export const updateContactSchema = z.object({
     phone: z.string().optional().nullable(),
     company: z.string().optional().nullable(),
     role: z.enum(['Client', 'Vendor', 'Freelancer', 'Partner']).optional(),
-    status: z.enum(['Active', 'Inactive', 'Pending']).optional(),
+    status: z.enum(['Active', 'Inactive', 'Pending', 'Prospect']).optional(),
     notes: z.string().optional().nullable(),
     tags: z.array(z.string()).optional(),
   }),
